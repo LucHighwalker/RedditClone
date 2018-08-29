@@ -1,0 +1,27 @@
+{
+  "name": "redditclone",
+  "version": "1.0.0",
+  "description": "A reddit clone done for the Backend Web 1.2 class",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucHighwalker/RedditClone.git"
+  },
+  "keywords": [
+    "reddit",
+    "clone"
+  ],
+  "author": "Luc \"Highwalker\" Boettner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucHighwalker/RedditClone/issues"
+  },
+  "homepage": "https://github.com/LucHighwalker/RedditClone#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0"
+  }
+}
