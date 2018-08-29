@@ -14,6 +14,13 @@ db.once('open', () => {
     console.log('database connected')
 });
 
+var modPost = mongoose.model('Post', {
+    title: String,
+    content: String,
+    postID: String,
+    userID: String,
+});
+
 // App initialization
 app.engine('hbs', exphbs({
     extname: 'hbs',
@@ -41,8 +48,22 @@ app.get('/posts/new', (req, res) => {
 
 app.get('/createpost', (req, res) => {
     var title = req.query.title ? req.query.title : null;
-    var post = req.query.post ? req.query.post : null;
+    var content = req.query.content ? req.query.content : null;
 
-    console.log(title);
-    console.log(post);
+    var post = new modPost({
+        title: title,
+        content: content,
+        postID: 'abcdef1234',
+        userID: 'test1234'
+    });
+
+    post.save((error => {
+        if (error) {
+            console.error(error);
+            res.render('error');
+        } else {
+            console.log('Saved post.');
+            res.render('posts-success');
+        }
+    }))
 });
