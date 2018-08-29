@@ -3,6 +3,17 @@ const app = express();
 
 const exphbs = require('express-handlebars');
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test', {
+    useNewUrlParser: true
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+    console.log('database connected')
+});
+
 // App initialization
 app.engine('hbs', exphbs({
     extname: 'hbs',
@@ -22,4 +33,16 @@ app.listen(4200, () => {
 
 app.get('/', (req, res) => {
     res.render('home');
-})
+});
+
+app.get('/posts/new', (req, res) => {
+    res.render('posts-new');
+});
+
+app.get('/createpost', (req, res) => {
+    var title = req.query.title ? req.query.title : null;
+    var post = req.query.post ? req.query.post : null;
+
+    console.log(title);
+    console.log(post);
+});
