@@ -16,7 +16,7 @@ db.once('open', () => {
 
 var modPost = mongoose.model('Post', {
     title: String,
-    content: String,
+    post: String,
     postID: String,
     userID: String,
 });
@@ -41,6 +41,20 @@ app.listen(4200, () => {
 app.get('/', (req, res) => {
     res.render('home');
 });
+
+app.get('/posts', (req, res) => {
+    modPost.find({}, (err, response) => {
+        if (err) {
+            console.error(err);
+            res.render('error');
+        } else {
+            console.log(response);
+            res.render('posts', {
+                posts: response
+            });
+        }
+    });
+})
 
 app.get('/posts/new', (req, res) => {
     res.render('posts-new');
