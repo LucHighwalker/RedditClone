@@ -42,14 +42,10 @@ app.get('/posts/new', (req, res) => {
 });
 
 app.get('/createpost', (req, res) => {
-    var title = req.query.title ? req.query.title : null;
-    var post = req.query.post ? req.query.post : null;
-
     var post = new database.postModel({
-        title: title,
-        post: post,
-        postID: 'abcdef1234',
-        userID: 'test1234'
+        title: 'hi',
+        url: 'https://luc.gg',
+        summary: 'hdasfvkjahsdf'
     });
 
     database.savePost(post).then(() => {

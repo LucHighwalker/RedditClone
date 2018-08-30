@@ -10,14 +10,15 @@ db.once('open', () => {
     console.log('database connected')
 });
 
-const postModel = mongoose.model('Post', {
-    title: String,
-    post: String,
-    postID: String,
-    userID: String,
+const Schema = mongoose.Schema;
+const postSchema = new Schema({
+    title: { type: String, required: true },
+    url: { type: String, required: true },
+    summary: { type: String, required: true }
 });
+const postModel = mongoose.model('Post', postSchema);
 
-function getAllPosts () {
+function getAllPosts() {
     return new Promise((resolve, reject) => {
         postModel.find({}, (error, response) => {
             if (error) {
@@ -29,7 +30,7 @@ function getAllPosts () {
     });
 }
 
-function savePost (post) {
+function savePost(post) {
     return new Promise((resolve, reject) => {
         post.save((error => {
             if (error) {
@@ -43,6 +44,7 @@ function savePost (post) {
 
 
 module.exports = {
+    postSchema: postSchema,
     postModel: postModel,
     getAllPosts: getAllPosts,
     savePost: savePost
