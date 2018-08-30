@@ -3,6 +3,8 @@ const app = express();
 
 const exphbs = require('express-handlebars');
 
+const bodyParser = require('body-parser');
+
 const database = require('./database');
 
 // App initialization
@@ -17,6 +19,7 @@ app.engine('hbs', exphbs({
 }));
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
+// app.use(bodyParser.json());
 
 app.listen(4200, () => {
     console.log('Reddit clone is listening on localhost:4200');
@@ -41,12 +44,9 @@ app.get('/posts/new', (req, res) => {
     res.render('posts-new');
 });
 
-app.get('/createpost', (req, res) => {
-    var post = new database.postModel({
-        title: 'hi',
-        url: 'https://luc.gg',
-        summary: 'hdasfvkjahsdf'
-    });
+urlEncodedParser = bodyParser.urlencoded({extended: false});
+app.post('/posts/new', urlEncodedParser, (req, res) => {
+    var post = new database.postModel(req.body);
 
     database.savePost(post).then(() => {
         res.render('posts-success');
