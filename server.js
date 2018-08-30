@@ -3,23 +3,7 @@ const app = express();
 
 const exphbs = require('express-handlebars');
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test', {
-    useNewUrlParser: true
-});
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('database connected')
-});
-
-var modPost = mongoose.model('Post', {
-    title: String,
-    post: String,
-    postID: String,
-    userID: String,
-});
+const database = require('./database');
 
 // App initialization
 app.engine('hbs', exphbs({
@@ -43,17 +27,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-    modPost.find({}, (err, response) => {
-        if (err) {
-            console.error(err);
-            res.render('error');
-        } else {
-            console.log(response);
-            res.render('posts', {
-                posts: response
-            });
-        }
-    });
+    database.getAllPosts().then((response) => {
+        res.render('posts', {
+            posts: response
+        });
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    })
 })
 
 app.get('/posts/new', (req, res) => {
@@ -62,22 +43,18 @@ app.get('/posts/new', (req, res) => {
 
 app.get('/createpost', (req, res) => {
     var title = req.query.title ? req.query.title : null;
-    var content = req.query.content ? req.query.content : null;
+    var post = req.query.post ? req.query.post : null;
 
-    var post = new modPost({
+    var post = new database.postModel({
         title: title,
-        content: content,
+        post: post,
         postID: 'abcdef1234',
         userID: 'test1234'
     });
 
-    post.save((error => {
-        if (error) {
-            console.error(error);
-            res.render('error');
-        } else {
-            console.log('Saved post.');
-            res.render('posts-success');
-        }
-    }))
+    database.savePost(post).then(() => {
+        res.render('posts-success');
+    }).catch((error) => {
+        console.error(error);
+    })
 });
