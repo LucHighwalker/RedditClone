@@ -12,6 +12,8 @@ db.once('open', () => {
 
 const Schema = mongoose.Schema;
 const postSchema = new Schema({
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
     title: { type: String, required: true },
     url: { type: String, required: true },
     summary: { type: String, required: true }
@@ -32,6 +34,12 @@ function getAllPosts() {
 
 function savePost(post) {
     return new Promise((resolve, reject) => {
+        const now = new Date();
+        post.updatedAt = now
+        if (!post.createdAt) {
+            post.createdAt = now
+        }
+
         post.save((error => {
             if (error) {
                 reject(error);
