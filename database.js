@@ -10,19 +10,9 @@ db.once('open', () => {
     console.log('database connected')
 });
 
-const Schema = mongoose.Schema;
-const postSchema = new Schema({
-    createdAt: { type: Date },
-    updatedAt: { type: Date },
-    title: { type: String, required: true },
-    url: { type: String, required: true },
-    summary: { type: String, required: true }
-});
-const postModel = mongoose.model('Post', postSchema);
-
-function getAllPosts() {
+function getAll(model) {
     return new Promise((resolve, reject) => {
-        postModel.find({}, (error, response) => {
+        model.find({}, (error, response) => {
             if (error) {
                 reject(error);
             } else {
@@ -30,17 +20,17 @@ function getAllPosts() {
             }
         });
     });
-}
+};
 
-function savePost(post) {
+function save(model) {
     return new Promise((resolve, reject) => {
         const now = new Date();
-        post.updatedAt = now
-        if (!post.createdAt) {
-            post.createdAt = now
+        model.updatedAt = now
+        if (!model.createdAt) {
+            model.createdAt = now
         }
 
-        post.save((error => {
+        model.save((error => {
             if (error) {
                 reject(error);
             } else {
@@ -48,12 +38,10 @@ function savePost(post) {
             }
         }));
     });
-}
+};
 
 
 module.exports = {
-    postSchema: postSchema,
-    postModel: postModel,
-    getAllPosts: getAllPosts,
-    savePost: savePost
+    getAll: getAll,
+    save: save
 };

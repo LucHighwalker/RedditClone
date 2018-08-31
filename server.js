@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 
 const database = require('./database');
 
+const PostModel = require('./models/post');
+
 // App initialization
 app.engine('hbs', exphbs({
     extname: 'hbs',
@@ -19,7 +21,6 @@ app.engine('hbs', exphbs({
 }));
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
-// app.use(bodyParser.json());
 
 app.listen(4200, () => {
     console.log('Reddit clone is listening on localhost:4200');
@@ -30,15 +31,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-    database.getAllPosts().then((response) => {
+    database.getAll(PostModel).then((response) => {
         res.render('posts', {
             posts: response
         });
     }).catch((error) => {
         console.error(error);
         res.render('error');
-    })
-})
+    });
+});
 
 app.get('/posts/new', (req, res) => {
     res.render('posts-new');
@@ -46,11 +47,11 @@ app.get('/posts/new', (req, res) => {
 
 urlEncodedParser = bodyParser.urlencoded({extended: false});
 app.post('/posts/new', urlEncodedParser, (req, res) => {
-    var post = new database.postModel(req.body);
+    var post = new PostModel(req.body);
 
-    database.savePost(post).then(() => {
+    database.save(post).then(() => {
         res.render('posts-success');
     }).catch((error) => {
         console.error(error);
-    })
+    });
 });
