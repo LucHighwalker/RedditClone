@@ -1,9 +1,15 @@
-{{#each posts}}
-    <div class="post">
-        <h2>{{this.title}}</h2>
-        <a href="{{this.url}}">{{this.url}}</a>
-        <p>{{this.summary}}</p>
-        <p>updated on: {{this.updatedAt}}</p>
-        <p>created on: {{this.createdAt}}</p>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <ul>
+            {{#each posts}}
+            <li class="post">
+                <h2>{{this.title}}</h2>
+                <a href="{{this.url}}">{{this.url}}</a>
+                <p>{{this.summary}}</p>
+                <p>updated on: {{this.updatedAt}}</p>
+                <p>created on: {{this.createdAt}}</p>
+            </li>
+            {{/each}}
+        </ul>
     </div>
-{{/each}}
+</div>
