@@ -10,6 +10,18 @@ db.once('open', () => {
     console.log('database connected')
 });
 
+function find(model, id) {
+    return new Promise((resolve, reject) => {
+        model.findById(id, (error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
 function getAll(model) {
     return new Promise((resolve, reject) => {
         model.find({}, (error, response) => {
@@ -20,7 +32,7 @@ function getAll(model) {
             }
         });
     });
-};
+}
 
 function save(model) {
     return new Promise((resolve, reject) => {
@@ -38,10 +50,11 @@ function save(model) {
             }
         }));
     });
-};
+}
 
 
 module.exports = {
+    find: find,
     getAll: getAll,
     save: save
 };

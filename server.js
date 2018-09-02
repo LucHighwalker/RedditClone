@@ -41,6 +41,15 @@ app.get('/posts', (req, res) => {
     });
 });
 
+app.get('/posts/:id', function (req, res) {
+    var id = req.params.id;
+    database.find(PostModel, id).then((post) => {
+        res.render('post-show.hbs', { post });
+    }).catch((error) => {
+        console.error(error);
+    });
+});
+
 app.get('/posts/new', (req, res) => {
     res.render('posts-new');
 });

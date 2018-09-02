@@ -3,11 +3,7 @@
         <ul>
             {{#each posts}}
             <li class="post">
-                <h2>{{this.title}}</h2>
-                <a href="{{this.url}}">{{this.url}}</a>
-                <p>{{this.summary}}</p>
-                <p>updated on: {{this.updatedAt}}</p>
-                <p>created on: {{this.createdAt}}</p>
+                <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
             </li>
             {{/each}}
         </ul>
