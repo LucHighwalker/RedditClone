@@ -2,12 +2,11 @@ const express = require('express');
 const app = express();
 
 const exphbs = require('express-handlebars');
-
 const bodyParser = require('body-parser');
-
 const database = require('./database');
-
 const PostModel = require('./models/post');
+
+urlEncodedParser = bodyParser.urlencoded({extended: false});
 
 // App initialization
 app.engine('hbs', exphbs({
@@ -41,22 +40,9 @@ app.get('/posts', (req, res) => {
     });
 });
 
-app.get('/posts/:id', function (req, res) {
-    var id = req.params.id;
-    database.find(PostModel, id).then((post) => {
-        res.render('post-show.hbs', { post });
-    }).catch((error) => {
-        console.error(error);
-    });
-});
-
-app.get('/posts/new', (req, res) => {
+app.get('/posts/create', (req, res) => {
     res.render('posts-new');
 });
-
-
-// POSTS
-urlEncodedParser = bodyParser.urlencoded({extended: false});
 
 app.post('/posts/new', urlEncodedParser, (req, res) => {
     var post = new PostModel(req.body);
@@ -76,6 +62,15 @@ app.post('/posts/del', urlEncodedParser, (req, res) => {
 
     database.del(PostModel, id).then(() => {
         res.render('posts-success');
+    }).catch((error) => {
+        console.error(error);
+    });
+});
+
+app.get('/posts/:id', function (req, res) {
+    var id = req.params.id;
+    database.find(PostModel, id).then((post) => {
+        res.render('post-show.hbs', { post });
     }).catch((error) => {
         console.error(error);
     });
