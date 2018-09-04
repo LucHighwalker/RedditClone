@@ -10,7 +10,7 @@ db.once('open', () => {
     console.log('database connected')
 });
 
-function find(model, id) {
+function getOne(model, id) {
     return new Promise((resolve, reject) => {
         model.findById(id, (error, response) => {
             if (error) {
@@ -68,7 +68,7 @@ function del(model, id) {
 
 
 module.exports = {
-    find: find,
+    getOne: getOne,
     getAll: getAll,
     save: save,
     del: del
