@@ -54,11 +54,27 @@ app.get('/posts/new', (req, res) => {
     res.render('posts-new');
 });
 
+
+// POSTS
 urlEncodedParser = bodyParser.urlencoded({extended: false});
+
 app.post('/posts/new', urlEncodedParser, (req, res) => {
     var post = new PostModel(req.body);
 
     database.save(post).then(() => {
+        res.render('posts-success');
+    }).catch((error) => {
+        console.error(error);
+    });
+});
+
+app.post('/posts/del', urlEncodedParser, (req, res) => {
+    var post = new PostModel(req.body);
+    var id = post._id;
+
+    console.log(post);
+
+    database.del(PostModel, id).then(() => {
         res.render('posts-success');
     }).catch((error) => {
         console.error(error);

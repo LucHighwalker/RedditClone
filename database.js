@@ -48,7 +48,21 @@ function save(model) {
             } else {
                 resolve();
             }
-        }));  
+        }));
+    });
+}
+
+function del(model, id) {
+    console.log(id);
+    return new Promise((resolve, reject) => {
+        model.deleteOne({ _id: id }, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                console.log('deleted');
+                resolve();
+            }
+        });
     });
 }
 
@@ -56,5 +70,6 @@ function save(model) {
 module.exports = {
     find: find,
     getAll: getAll,
-    save: save
+    save: save,
+    del: del
 };
