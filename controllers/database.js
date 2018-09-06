@@ -53,13 +53,13 @@ function save(model) {
             model.createdAt = now
         }
 
-        model.save((error => {
+        model.save((error) => {
             if (error) {
                 reject(error);
             } else {
                 resolve();
             }
-        }));
+        });
     });
 }
 

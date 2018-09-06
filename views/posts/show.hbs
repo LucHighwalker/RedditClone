@@ -7,4 +7,10 @@
     <input style="display: none" type="text" name="_id" value="{{post._id}}">
     <input type="submit" value="delete"/>
   </form>
+  <form action="/posts/{{post._id}}/comment" method="post">
+    <textarea class='form-control' name="content" placeholder="Comment"></textarea>
+    <div class="text-right">
+      <button type="submit">Save</button>
+    </div>
+  </form>
 </div>
