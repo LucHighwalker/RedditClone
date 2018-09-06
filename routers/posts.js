@@ -11,7 +11,7 @@ posts.get('/', (req, res) => {
     var search = req.search;
 
     database.getAll(PostModel, search).then((response) => {
-        res.render('posts', {
+        res.render('posts/posts', {
             posts: response
         });
     }).catch((error) => {
@@ -21,14 +21,14 @@ posts.get('/', (req, res) => {
 });
 
 posts.get('/create', (req, res) => {
-    res.render('posts-new');
+    res.render('posts/new');
 });
 
 posts.post('/new', urlEncodedParser, (req, res) => {
     var post = new PostModel(req.body);
 
     database.save(post).then(() => {
-        res.render('posts-success');
+        res.render('posts/success');
     }).catch((error) => {
         console.error(error);
     });
@@ -41,7 +41,7 @@ posts.post('/del', urlEncodedParser, (req, res) => {
     console.log(post);
 
     database.del(PostModel, id).then(() => {
-        res.render('posts-success');
+        res.render('posts/success');
     }).catch((error) => {
         console.error(error);
     });
@@ -50,7 +50,7 @@ posts.post('/del', urlEncodedParser, (req, res) => {
 posts.get('/:id', function (req, res) {
     var id = req.params.id;
     database.getOne(PostModel, id).then((post) => {
-        res.render('post-show.hbs', { post });
+        res.render('posts/show.hbs', { post });
     }).catch((error) => {
         console.error(error);
     });
