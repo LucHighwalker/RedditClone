@@ -30,7 +30,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/posts', (req, res) => {
-    database.getAll(PostModel).then((response) => {
+    var search = req.query.search;
+
+    database.getAll(PostModel, search).then((response) => {
         res.render('posts', {
             posts: response
         });

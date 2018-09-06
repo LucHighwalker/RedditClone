@@ -7,8 +7,10 @@ mongoose.connect('mongodb://localhost/test', {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-    console.log('database connected')
+    console.log('database connected');
 });
+
+mongoose.set('useCreateIndex', true);
 
 function getOne(model, id) {
     return new Promise((resolve, reject) => {
@@ -22,9 +24,19 @@ function getOne(model, id) {
     });
 }
 
-function getAll(model) {
+function getAll(model, search = null) {
+    var query = {}
+    
+    if (search) {
+        query = {
+            $text: {
+                $search: search
+            }
+        }
+    }
+
     return new Promise((resolve, reject) => {
-        model.find({}, (error, response) => {
+        model.find(query, (error, response) => {
             if (error) {
                 reject(error);
             } else {
@@ -53,13 +65,11 @@ function save(model) {
 }
 
 function del(model, id) {
-    console.log(id);
     return new Promise((resolve, reject) => {
         model.deleteOne({ _id: id }, (err) => {
             if (err) {
                 reject(err);
             } else {
-                console.log('deleted');
                 resolve();
             }
         });
