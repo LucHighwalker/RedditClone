@@ -3,14 +3,13 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test', {
     useNewUrlParser: true
 });
+mongoose.set('useCreateIndex', true);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
     console.log('database connected');
 });
-
-mongoose.set('useCreateIndex', true);
 
 function getOne(model, id) {
     return new Promise((resolve, reject) => {
