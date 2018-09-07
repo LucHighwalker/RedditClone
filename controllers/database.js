@@ -23,6 +23,18 @@ function getOne(model, id) {
     });
 }
 
+function populateOne(model, id, populate) {
+    return new Promise((resolve, reject) => {
+        model.findById(id).populate(populate).exec((error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
 function getAll(model, search = null) {
     var query = {}
     
@@ -78,6 +90,7 @@ function del(model, id) {
 
 module.exports = {
     getOne: getOne,
+    populateOne: populateOne,
     getAll: getAll,
     save: save,
     del: del

@@ -21,7 +21,7 @@ posts.get('/', (req, res) => {
     });
 });
 
-posts.get('/create', (req, res) => {
+posts.get('/new', (req, res) => {
     res.render('posts/new');
 });
 
@@ -39,8 +39,6 @@ posts.post('/del', urlEncodedParser, (req, res) => {
     var post = new PostModel(req.body);
     var id = post._id;
 
-    console.log(post);
-
     database.del(PostModel, id).then(() => {
         res.render('posts/success');
     }).catch((error) => {
@@ -50,7 +48,8 @@ posts.post('/del', urlEncodedParser, (req, res) => {
 
 posts.get('/:id', (req, res) => {
     var id = req.params.id;
-    database.getOne(PostModel, id).then((post) => {
+    
+    database.populateOne(PostModel, id, "comments").then((post) => {
         res.render('posts/show.hbs', { post });
     }).catch((error) => {
         console.error(error);
@@ -60,6 +59,7 @@ posts.get('/:id', (req, res) => {
 posts.post('/:id/comment', urlEncodedParser, (req, res) => {
     var id = req.params.id;
     var content = req.body.content ? req.body.content : null;
+
     comment.saveComment(id, content).then(() => {
         res.render('posts/success');
     }).catch((error) => {
