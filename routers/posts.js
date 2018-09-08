@@ -48,9 +48,9 @@ posts.post('/del', urlEncodedParser, (req, res) => {
 
 posts.get('/:id', (req, res) => {
     var id = req.params.id;
-    
+
     database.populateOne(PostModel, id, "comments").then((post) => {
-        res.render('posts/show.hbs', { post });
+        res.render('posts/show', { post });
     }).catch((error) => {
         console.error(error);
     });
@@ -61,7 +61,7 @@ posts.post('/:id/comment', urlEncodedParser, (req, res) => {
     var content = req.body.content ? req.body.content : null;
 
     comment.saveComment(id, content).then(() => {
-        res.render('posts/success');
+        res.redirect('/posts/' + id);
     }).catch((error) => {
         console.error(error);
         res.render('error');
