@@ -6,7 +6,11 @@ const userModel = require('../models/user');
 
 urlEncodedParser = bodyParser.urlencoded({extended: false});
 
-users.post('/signup', urlEncodedParser, (req, res) => {
+users.get('/n', (req, res) => {
+    res.render('users/signup');
+});
+
+users.post('/n', urlEncodedParser, (req, res) => {
     const user = new userModel(req.body);
 
     database.save(user).then(() => {

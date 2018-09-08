@@ -4,6 +4,7 @@ const app = express();
 const exphbs = require('express-handlebars');
 
 const postRouter = require('./routers/posts');
+const userRouter = require('./routers/users');
 
 // App initialization
 app.engine('hbs', exphbs({
@@ -26,7 +27,11 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.use('/posts', (req, res, next) => {
+app.use('/p', (req, res, next) => {
     req.search = req.query.search;
     next();
 }, postRouter);
+
+app.use('/u', (req, res, next) => {
+    next();
+}, userRouter);

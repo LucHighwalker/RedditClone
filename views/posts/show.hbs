@@ -3,11 +3,11 @@
     <a href="{{post.url}}" class="lead">{{post.title}}</a>
     <p>{{post.summary}}</p>
   </div>
-  <form action="/posts/del" method="post">
+  <form action="/p/d" method="post">
     <input style="display: none" type="text" name="_id" value="{{post._id}}">
     <input type="submit" value="delete" />
   </form>
-  <form action="/posts/{{post._id}}/comment" method="post">
+  <form action="/p/{{post._id}}/c" method="post">
     <textarea class='form-control' name="content" placeholder="Comment"></textarea>
     <div class="text-right">
       <button type="submit">Save</button>
