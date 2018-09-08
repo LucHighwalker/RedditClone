@@ -15,12 +15,10 @@ function saveComment(postID, content) {
                 database.save(post).then(() => {
                     resolve();
                 }).catch((error) => {
-                    console.error(error);
-                    reject("Error saving post comment");
-                })
+                    reject(reject);
+                });
             }).catch((error) => {
-                console.error(error);
-                reject("Error finding post");
+                reject(error);
             });
         });
     }).catch((error) => {
