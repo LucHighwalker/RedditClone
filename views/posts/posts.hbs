@@ -2,8 +2,10 @@
     <div class="col-sm-8 col-sm-offset-2">
         <ul>
             {{#each posts}}
-            <li class="post">
-                <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
+            <li class="post col-sm-12">
+                <div>
+                    <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
+                </div>
             </li>
             {{/each}}
         </ul>

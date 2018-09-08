@@ -1,0 +1,12 @@
+.post {
+    border-style: solid;
+    border-color: lightgray;
+    border-collapse: collapse;
+    list-style-type: none;
+    height: 150px;
+}
+
+.post:nth-child(even) {
+    border-top-style: none;
+    border-bottom-style: none;
+}
