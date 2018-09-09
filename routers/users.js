@@ -7,11 +7,16 @@ const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 const database = require('../controllers/database');
 const userModel = require('../models/user');
 
-users.get('/n', (req, res) => {
+users.get('/lo', (req, res) => {
+    res.clearCookie('nToken');
+    res.redirect('/');
+});
+
+users.get('/su', (req, res) => {
     res.render('users/signup');
 });
 
-users.post('/n', urlEncodedParser, (req, res) => {
+users.post('/su', urlEncodedParser, (req, res) => {
     const user = new userModel(req.body);
 
     database.save(user).then((user) => {
