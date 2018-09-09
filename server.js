@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 
@@ -5,6 +7,9 @@ const exphbs = require('express-handlebars');
 
 const postRouter = require('./routers/posts');
 const userRouter = require('./routers/users');
+
+const cookieMonster = require('cookie-parser');
+app.use(cookieMonster());
 
 // App initialization
 app.engine('hbs', exphbs({

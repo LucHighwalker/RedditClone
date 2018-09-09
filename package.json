@@ -21,9 +21,13 @@
   },
   "homepage": "https://github.com/LucHighwalker/RedditClone#readme",
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
+    "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.10",
     "sass": "^1.13.2"
   },

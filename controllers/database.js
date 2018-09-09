@@ -60,16 +60,16 @@ function getAll(model, search = null) {
 function save(model) {
     return new Promise((resolve, reject) => {
         const now = new Date();
-        model.updatedAt = now
+        model.updatedAt = now;
         if (!model.createdAt) {
-            model.createdAt = now
+            model.createdAt = now;
         }
 
         model.save((error) => {
             if (error) {
                 reject(error);
             } else {
-                resolve();
+                resolve(model);
             }
         });
     });
