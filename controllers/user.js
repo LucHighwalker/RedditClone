@@ -1,3 +1,5 @@
+const database = require('./database');
+
 const bcrypt = require('bcrypt');
 
 function encryptPassword(user) {
@@ -21,6 +23,17 @@ function encryptPassword(user) {
     });
 }
 
+function signUp(user) {
+    return new Promise((resolve, reject) => {
+        database.save(user).then((user) => {
+            resolve(user);
+        }).catch((error) => {
+            reject(error);
+        });
+    })
+}
+
 module.exports = {
-    encryptPassword: encryptPassword
+    encryptPassword: encryptPassword,
+    signUp: signUp
 }

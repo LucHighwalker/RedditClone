@@ -2,7 +2,7 @@ const posts = require('express').Router();
 
 const bodyParser = require('body-parser');
 const database = require('../controllers/database');
-const comment = require('../controllers/comments');
+const commentController = require('../controllers/comments');
 
 const PostModel = require('../models/post');
 
@@ -60,7 +60,7 @@ posts.post('/:id/c', urlEncodedParser, (req, res) => {
     var id = req.params.id;
     var content = req.body.content ? req.body.content : null;
 
-    comment.saveComment(id, content).then(() => {
+    commentController.saveComment(id, content).then(() => {
         res.redirect('/p/' + id);
     }).catch((error) => {
         console.error(error);
