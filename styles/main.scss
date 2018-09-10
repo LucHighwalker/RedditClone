@@ -3,10 +3,26 @@
     border-color: lightgray;
     border-collapse: collapse;
     list-style-type: none;
-    height: 150px;
+    cursor: pointer;
+
+    a {
+        display: block;
+        height: 75px;
+        width: 100%;
+        color: darkgrey;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: rgb(136, 135, 135)
+    }
 }
 
 .post:nth-child(even) {
     border-top-style: none;
     border-bottom-style: none;
+}
+
+.post:last-child {
+    border-bottom-style: solid;
 }

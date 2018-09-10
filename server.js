@@ -29,7 +29,6 @@ app.listen(4200, () => {
 });
 
 app.get('/', (req, res) => {
-    console.log(req.cookies);
     res.render('home');
 });
 
