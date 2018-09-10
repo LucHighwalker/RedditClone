@@ -7,6 +7,10 @@ const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 const controller = require('../controllers/user');
 const userModel = require('../models/user');
 
+users.get('/li', (req, res) => {
+    res.render('users/login');
+});
+
 users.get('/lo', (req, res) => {
     res.clearCookie('nToken');
     res.redirect('/');
