@@ -1,28 +1,8 @@
-.post {
-    border-style: solid;
-    border-color: lightgray;
-    border-collapse: collapse;
-    list-style-type: none;
-    cursor: pointer;
+@import "partials/navbar.scss";
 
-    a {
-        display: block;
-        height: 75px;
-        width: 100%;
-        color: darkgrey;
-    }
+@import "views/error.scss";
+@import "views/home.scss";
+@import "views/posts.scss";
+@import "views/users.scss";
 
-    a:hover {
-        text-decoration: none;
-        color: rgb(136, 135, 135)
-    }
-}
-
-.post:nth-child(even) {
-    border-top-style: none;
-    border-bottom-style: none;
-}
-
-.post:last-child {
-    border-bottom-style: solid;
-}
+@import "animations.scss";

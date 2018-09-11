@@ -18,7 +18,9 @@ app.engine('hbs', exphbs({
     layoutsDir: __dirname + '/views/layouts',
     partialsDir: __dirname + '/views/partials',
     helpers: {
-        //helper functions
+        isWarning: (warning) => {
+            return warning ? ' warning' : '';
+        }
     }
 }));
 app.set('view engine', 'hbs');

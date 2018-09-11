@@ -4,15 +4,18 @@
             <legend>Log In</legend>
             <div class="form-group">
                 <label for="post-username">username</label>
-                <input type="text" name="username" class="form-control" id="post-username" placeholder="username">
+                <input type="text" name="username" class="form-control{{isWarning warning}}" id="post-username" placeholder="username" value="{{username}}">
             </div>
             <div class="form-group">
                 <label for="post-password">password</label>
-                <input type="password" name="password" class="form-control" id="post-password" placeholder="*******">
+                <input type="password" name="password" class="form-control{{isWarning warning}}" id="post-password" placeholder="*******">
             </div>
             <div class='text-right'>
                 <button type="submit" class="btn btn-primary">Log In</button>
             </div>
+            {{#if warning}}
+                <p style="color: red">Incorrect username/password.</p>
+            {{/if}}
         </form>
     </div>
 </div>

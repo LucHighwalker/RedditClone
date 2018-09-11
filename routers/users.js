@@ -24,8 +24,15 @@ users.post('/li', urlEncodedParser, (req, res) => {
         res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
         res.redirect('/');
     }).catch((error) => {
-        console.error(error);
-        res.render('error');
+        if (error === 'incorrect') {
+            res.render('users/login', {
+                warning: true,
+                username: username
+            });
+        } else {
+            console.error(error);
+            res.render('error');
+        }
     });
 });
 

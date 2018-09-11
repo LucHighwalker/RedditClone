@@ -8,13 +8,13 @@ function logIn(username, password) {
             if (err) {
                 reject(err);
             } else if (!user) {
-                reject('Incorrect username/password.');
+                reject('incorrect');
             } else {
                 auth.comparePassword(password, user.password).then((match) => {
                     if (match) {
                         resolve(user);
                     } else {
-                        reject('Incorrect username/password.');
+                        reject('incorrect');
                     }
                 }).catch((error) => {
                     reject(error);
