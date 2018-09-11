@@ -1,25 +1,26 @@
 const database = require('./database');
+const auth = require('./auth');
+const userModel = require('../models/user');
 
-const bcrypt = require('bcrypt');
-
-function encryptPassword(user) {
+function logIn(username, password) {
     return new Promise((resolve, reject) => {
-        if (!user.isModified('password')) {
-            resolve();
-        } else {
-            bcrypt.genSalt(10, (err, salt) => {
-                if (err) {
-                    reject(err);
-                }
-                bcrypt.hash(user.password, salt, (err, hash) => {
-                    if (err) {
-                        reject(err);
+        userModel.findOne({ username: username }, (err, user) => {
+            if (err) {
+                reject(err);
+            } else if (!user) {
+                reject('Incorrect username/password.');
+            } else {
+                auth.comparePassword(password, user.password).then((match) => {
+                    if (match) {
+                        resolve(user);
+                    } else {
+                        reject('Incorrect username/password.');
                     }
-                    user.password = hash;
-                    resolve();
+                }).catch((error) => {
+                    reject(error);
                 });
-            });
-        }
+            }
+        });
     });
 }
 
@@ -34,6 +35,6 @@ function signUp(user) {
 }
 
 module.exports = {
-    encryptPassword: encryptPassword,
+    logIn: logIn,
     signUp: signUp
 }

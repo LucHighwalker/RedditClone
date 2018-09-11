@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const auth = require('../controllers/user');
+const auth = require('../controllers/auth');
 
 const userSchema = new Schema({
     createdAt: { type: Date },
     updatedAt: { type: Date },
     username: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, select: false }
+    password: { type: String, required: true }
 });
 
 userSchema.pre('save', function (next) {
@@ -19,11 +19,5 @@ userSchema.pre('save', function (next) {
         next();
     });
 });
-
-userSchema.methods.comparePassword = (password, done) => {
-    bcrypt.compare(password, this.password, (err, isMatch) => {
-        done(err, isMatch);
-    });
-};
 
 module.exports = mongoose.model('User', userSchema);
