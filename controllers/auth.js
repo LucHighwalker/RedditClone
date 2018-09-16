@@ -1,4 +1,10 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+function getUser(token) {
+    var decodedToken = jwt.decode(token);
+    return decodedToken;
+}
 
 function encryptPassword(user) {
     return new Promise((resolve, reject) => {
@@ -34,6 +40,7 @@ function comparePassword(password, hashedPass) {
 }
 
 module.exports = {
+    getUser: getUser,
     encryptPassword: encryptPassword,
     comparePassword: comparePassword
 }

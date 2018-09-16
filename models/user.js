@@ -13,7 +13,7 @@ const userSchema = new Schema({
 
 userSchema.pre('save', function (next) {
     auth.encryptPassword(this).then(() => {
-        next()
+        next();
     }).catch((error) => {
         console.error(error);
         next();

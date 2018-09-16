@@ -8,6 +8,8 @@ const exphbs = require('express-handlebars');
 const postRouter = require('./routers/posts');
 const userRouter = require('./routers/users');
 
+const auth = require('./controllers/auth');
+
 const cookieMonster = require('cookie-parser');
 app.use(cookieMonster());
 
@@ -31,6 +33,10 @@ app.listen(4200, () => {
 });
 
 app.get('/', (req, res) => {
+    console.log(req.cookies.nToken);
+    if (req.cookies.nToken !== undefined) {
+        console.log(auth.getUser(req.cookies.nToken));
+    }
     res.render('home');
 });
 
