@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.use('/p', (req, res, next) => {
+app.use('/r', (req, res, next) => {
     req.search = req.query.search;
     next();
 }, postRouter);

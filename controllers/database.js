@@ -35,15 +35,17 @@ function populateOne(model, id, populate) {
     });
 }
 
-function getAll(model, search = null) {
+function getAll(model, search = null, subreddit = null) {
     var query = {}
     
     if (search) {
-        query = {
-            $text: {
+        query.$text = {
                 $search: search
             }
-        }
+    }
+
+    if (subreddit) {
+        query.subreddit = subreddit;
     }
 
     return new Promise((resolve, reject) => {
