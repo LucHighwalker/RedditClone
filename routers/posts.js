@@ -114,7 +114,7 @@ posts.get('/:subreddit', (req, res) => {
     var subreddit = req.params.subreddit;
     var search = req.search;
 
-    database.getAll(PostModel, search).then((response) => {
+    database.getAll(PostModel, search, subreddit).then((response) => {
         subr.getSubreddits().then((subreddits) => {
             res.render('posts/posts', {
                 subreddits: subreddits,
