@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 
+const subr = require('../controllers/subreddits');
 const controller = require('../controllers/user');
 const userModel = require('../models/user');
 
