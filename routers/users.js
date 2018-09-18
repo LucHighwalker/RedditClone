@@ -12,7 +12,14 @@ function generateToken(data, expiration) {
 }
 
 users.get('/li', (req, res) => {
-    res.render('users/login');
+    subr.getSubreddits().then((subreddits) => {
+        res.render('users/login', {
+            subreddits: subreddits
+        });
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
 });
 
 users.post('/li', urlEncodedParser, (req, res) => {
@@ -42,7 +49,14 @@ users.get('/lo', (req, res) => {
 });
 
 users.get('/su', (req, res) => {
-    res.render('users/signup');
+    subr.getSubreddits().then((subreddits) => {
+        res.render('users/signup', {
+            subreddits: subreddits
+        });
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
 });
 
 users.post('/su', urlEncodedParser, (req, res) => {

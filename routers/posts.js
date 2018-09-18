@@ -3,6 +3,8 @@ const posts = require('express').Router();
 const bodyParser = require('body-parser');
 const database = require('../controllers/database');
 const commentController = require('../controllers/comments');
+const postController = require('../controllers/posts');
+const subr = require('../controllers/subreddits');
 
 const PostModel = require('../models/post');
 
@@ -10,14 +12,25 @@ urlEncodedParser = bodyParser.urlencoded({
     extended: false
 });
 
-posts.get('/:subreddit', (req, res) => {
-    var subreddit = req.params.subreddit;
-    var search = req.search;
+// posts.get('/', (req, res) => {
+//     var subreddit = req.params.subreddit;
+//     var search = req.search;
 
-    database.getAll(PostModel, search).then((response) => {
-        res.render('posts/posts', {
-            subreddit: subreddit,
-            posts: response
+//     database.getAll(PostModel, search).then((response) => {
+//         res.render('posts/posts', {
+//             subreddit: subreddit,
+//             posts: response
+//         });
+//     }).catch((error) => {
+//         console.error(error);
+//         res.render('error');
+//     });
+// });
+
+posts.get('/n', (req, res) => {
+    subr.getSubreddits().then((subreddits) => {
+        res.render('posts/new', {
+            subreddits: subreddits
         });
     }).catch((error) => {
         console.error(error);
@@ -25,17 +38,21 @@ posts.get('/:subreddit', (req, res) => {
     });
 });
 
-posts.get('/n', (req, res) => {
-    res.render('posts/new');
-});
-
 posts.post('/n', urlEncodedParser, (req, res) => {
     var post = new PostModel(req.body);
 
-    database.save(post).then(() => {
-        res.render('posts/success');
+    postController.savePost(post).then(() => {
+        subr.getSubreddits().then((subreddits) => {
+            res.render('posts/success', {
+                subreddits: subreddits
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
     }).catch((error) => {
         console.error(error);
+        res.render('error');
     });
 });
 
@@ -44,9 +61,17 @@ posts.post('/d', urlEncodedParser, (req, res) => {
     var id = post._id;
 
     database.del(PostModel, id).then(() => {
-        res.render('posts/success');
+        subr.getSubreddits().then((subreddits) => {
+            res.render('posts/success', {
+                subreddits: subreddits
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
     }).catch((error) => {
         console.error(error);
+        res.render('error');
     });
 });
 
@@ -55,12 +80,20 @@ posts.get('/:subreddit/:id', (req, res) => {
     var id = req.params.id;
 
     database.populateOne(PostModel, id, "comments").then((post) => {
-        res.render('posts/show', {
-            post,
-            subreddit: subreddit
+        subr.getSubreddits().then((subreddits) => {
+            res.render('posts/show', {
+                post,
+                subreddits: subreddits,
+                subreddit: subreddit
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
         });
+
     }).catch((error) => {
         console.error(error);
+        res.render('error');
     });
 });
 
@@ -71,6 +104,28 @@ posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
 
     commentController.saveComment(id, content).then(() => {
         res.redirect('/r/' + subreddit + '/' + id);
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
+});
+
+posts.get('/:subreddit', (req, res) => {
+    var subreddit = req.params.subreddit;
+    var search = req.search;
+
+    database.getAll(PostModel, search).then((response) => {
+        subr.getSubreddits().then((subreddits) => {
+            res.render('posts/posts', {
+                subreddits: subreddits,
+                subreddit: subreddit,
+                posts: response
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
+
     }).catch((error) => {
         console.error(error);
         res.render('error');

@@ -9,6 +9,7 @@ const postRouter = require('./routers/posts');
 const userRouter = require('./routers/users');
 
 const auth = require('./controllers/auth');
+const subr = require('./controllers/subreddits');
 
 const cookieMonster = require('cookie-parser');
 app.use(cookieMonster());
@@ -37,7 +38,15 @@ app.get('/', (req, res) => {
     if (req.cookies.nToken !== undefined) {
         console.log(auth.getUser(req.cookies.nToken));
     }
-    res.render('home');
+    
+    subr.getSubreddits().then((subreddits) => {
+        res.render('home', {
+            subreddits: subreddits
+        });
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
 });
 
 app.use('/r', (req, res, next) => {
