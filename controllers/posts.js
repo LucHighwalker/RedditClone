@@ -33,18 +33,16 @@ function checkSubreddits(subreddit) {
                         resolve(true)
                     }
                 }
-                if (!found_subr) {
-                    subreddits.content.push(subreddit);
-                    SubrModel.updateOne({
-                        _id: subreddits._id
-                    }, subreddits, (err, resp) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            resolve(false);
-                        }
-                    });
-                }
+                subreddits.content.push(subreddit);
+                SubrModel.updateOne({
+                    _id: subreddits._id
+                }, subreddits, (err, resp) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(false);
+                    }
+                });
             } else {
                 let subreddits = new SubrModel({
                     content: [subreddit]
