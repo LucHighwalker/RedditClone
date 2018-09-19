@@ -5,7 +5,6 @@ const database = require('../controllers/database');
 const user = require('../controllers/user');
 const commentController = require('../controllers/comments');
 const postController = require('../controllers/posts');
-const subr = require('../controllers/subreddits');
 const helper = require('../helper/helper');
 
 const PostModel = require('../models/post');
@@ -17,7 +16,6 @@ urlEncodedParser = bodyParser.urlencoded({
 // posts.get('/', (req, res) => {
     //TODO: create a view to display subreddits.
 // });
-
 
 posts.get('/n', (req, res) => {
     let token = req.token;
@@ -71,12 +69,18 @@ posts.get('/:subreddit/:id', (req, res) => {
 });
 
 posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
+    let token = req.token;
     let subreddit = req.params.subreddit;
     let id = req.params.id;
     let content = req.body.content ? req.body.content : null;
 
-    commentController.saveComment(id, content).then(() => {
-        res.redirect('/r/' + subreddit + '/' + id);
+    user.getUser(token).then((author) => {
+        commentController.saveComment(id, content, author).then(() => {
+            res.redirect('/r/' + subreddit + '/' + id);
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
     }).catch((error) => {
         console.error(error);
         res.render('error');
