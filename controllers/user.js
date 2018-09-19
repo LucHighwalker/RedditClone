@@ -4,9 +4,11 @@ const database = require('./database');
 const auth = require('./auth');
 const userModel = require('../models/user');
 
+var curUser = null;
+
 function getUser(token) {
     return new Promise((resolve, reject) => {
-        if (token !== undefined) {
+        if (token !== undefined && curUser === null) {
             var decodedToken = jwt.decode(token);
             userModel.findOne({
                 _id: decodedToken._id
@@ -14,13 +16,17 @@ function getUser(token) {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve({
+                    curUser = {
                         _id: resp._id,
                         username: resp.username
-                    });
+                    };
+                    resolve(curUser);
                 }
             });
+        } else if (token !== undefined && curUser !== null) {
+            resolve(curUser);
         } else {
+            curUser = null;
             resolve(null);
         }
     });

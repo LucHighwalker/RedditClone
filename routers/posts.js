@@ -28,8 +28,13 @@ posts.post('/n', urlEncodedParser, (req, res) => {
     let token = req.token;
     let post = new PostModel(req.body);
 
-    postController.savePost(post).then(() => {
-        helper.render(res, token, 'posts/success', true);
+    user.getUser(token).then((author) => {
+        postController.savePost(post, author).then(() => {
+            helper.render(res, token, 'posts/success', true);
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
     }).catch((error) => {
         console.error(error);
         res.render('error');

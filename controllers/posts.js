@@ -1,8 +1,9 @@
 const database = require('./database');
 
 const SubrModel = require('../models/subreddits');
+const UserModel = require('../models/user');
 
-function savePost(post) {
+function savePost(post, author) {
     return new Promise((resolve, reject) => {
 
         checkSubreddits(post.subreddit).then((found) => {
@@ -12,14 +13,24 @@ function savePost(post) {
             console.error('Error checking subreddits!');
         });
 
-        database.save(post).then(() => {
-            resolve(post);
-        }).catch((err) => {
-            reject(err);
-        });
-    }).catch((error) => {
-        console.error(error);
-        reject(error);
+        database.getOne(UserModel, author._id).then((user) => {
+            user.posts.unshift(post);
+            UserModel.updateOne({
+                _id: user._id
+            }, user, (err, resp) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    post.author = author;
+            
+                    database.save(post).then(() => {
+                        resolve(post);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                }
+            })
+        })
     });
 }
 
