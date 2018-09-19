@@ -6,7 +6,7 @@ const urlEncodedParser = bodyParser.urlencoded({
     extended: false
 });
 
-const subr = require('../controllers/subreddits');
+const database = require('../controllers/database');
 const controller = require('../controllers/user');
 const userModel = require('../models/user');
 const helper = require('../helper/helper');
@@ -16,6 +16,20 @@ function generateToken(data, expiration) {
         expiresIn: expiration
     });
 }
+
+users.get('/', (req, res) => {
+    let token = req.token;
+    controller.getUser(token).then((user) => {
+        database.populateTwo(userModel, user._id, "posts", "comments").then((displayUser) => {
+            helper.render(res, token, 'users/user', false, {
+                displayUser: displayUser
+            });
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
+    });
+});
 
 users.get('/li', (req, res) => {
     let token = req.token;
@@ -71,6 +85,20 @@ users.post('/su', urlEncodedParser, (req, res) => {
             httpOnly: true
         });
         res.redirect('/');
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
+});
+
+users.get('/:id', (req, res) => {
+    let token = req.token;
+    let id = req.params.id;
+
+    database.populateTwo(userModel, id, "posts", "comments").then((displayUser) => {
+        helper.render(res, token, 'users/user', false, {
+            displayUser: displayUser
+        });
     }).catch((error) => {
         console.error(error);
         res.render('error');

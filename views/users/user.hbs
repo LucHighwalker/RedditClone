@@ -1,0 +1,17 @@
+<h1>{{displayUser.username}}</h1>
+<br>
+<br>
+<h3>posts:</h3>
+<ul>
+    {{#each displayUser.posts}}
+    <li><a href="/r/{{this.subreddit}}/{{this._id}}">{{this.title}}</a></li>
+    {{/each}}
+</ul>
+<br>
+<br>
+<h3>comments:</h3>
+<ul>
+{{#each displayUser.comments}}
+<li><p>{{this.content}}</p></li>
+{{/each}}
+</ul>
