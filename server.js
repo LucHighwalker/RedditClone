@@ -8,9 +8,7 @@ const exphbs = require('express-handlebars');
 const postRouter = require('./routers/posts');
 const userRouter = require('./routers/users');
 
-const auth = require('./controllers/auth');
-const user = require('./controllers/user');
-const subr = require('./controllers/subreddits');
+const helper = require('./helper/helper');
 
 const cookieMonster = require('cookie-parser');
 app.use(cookieMonster());
@@ -36,27 +34,16 @@ app.listen(4200, () => {
 
 app.get('/', (req, res) => {
     let token = req.cookies.nToken;
-    user.getUser(token).then((cur_user) => {
-        subr.getSubreddits().then((subreddits) => {
-            res.render('home', {
-                user: cur_user,
-                subreddits: subreddits
-            });
-        }).catch((error) => {
-            console.error(error);
-            res.render('error');
-        });
-    }).catch((error) => {
-        console.error(error);
-        res.render('error');
-    });
+    helper.render(res, token, 'home', false);
 });
 
 app.use('/r', (req, res, next) => {
+    req.token = req.cookies.nToken;
     req.search = req.query.search;
     next();
 }, postRouter);
 
 app.use('/u', (req, res, next) => {
+    req.token = req.cookies.nToken;
     next();
 }, userRouter);

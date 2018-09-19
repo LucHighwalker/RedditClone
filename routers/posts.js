@@ -2,9 +2,11 @@ const posts = require('express').Router();
 
 const bodyParser = require('body-parser');
 const database = require('../controllers/database');
+const user = require('../controllers/user');
 const commentController = require('../controllers/comments');
 const postController = require('../controllers/posts');
 const subr = require('../controllers/subreddits');
+const helper = require('../helper/helper');
 
 const PostModel = require('../models/post');
 
@@ -13,43 +15,21 @@ urlEncodedParser = bodyParser.urlencoded({
 });
 
 // posts.get('/', (req, res) => {
-//     var subreddit = req.params.subreddit;
-//     var search = req.search;
-
-//     database.getAll(PostModel, search).then((response) => {
-//         res.render('posts/posts', {
-//             subreddit: subreddit,
-//             posts: response
-//         });
-//     }).catch((error) => {
-//         console.error(error);
-//         res.render('error');
-//     });
+    //TODO: create a view to display subreddits.
 // });
 
+
 posts.get('/n', (req, res) => {
-    subr.getSubreddits().then((subreddits) => {
-        res.render('posts/new', {
-            subreddits: subreddits
-        });
-    }).catch((error) => {
-        console.error(error);
-        res.render('error');
-    });
+    let token = req.token;
+    helper.render(res, token, 'posts/new', true);
 });
 
 posts.post('/n', urlEncodedParser, (req, res) => {
-    var post = new PostModel(req.body);
+    let token = req.token;
+    let post = new PostModel(req.body);
 
     postController.savePost(post).then(() => {
-        subr.getSubreddits().then((subreddits) => {
-            res.render('posts/success', {
-                subreddits: subreddits
-            });
-        }).catch((error) => {
-            console.error(error);
-            res.render('error');
-        });
+        helper.render(res, token, 'posts/success', true);
     }).catch((error) => {
         console.error(error);
         res.render('error');
@@ -57,18 +37,12 @@ posts.post('/n', urlEncodedParser, (req, res) => {
 });
 
 posts.post('/d', urlEncodedParser, (req, res) => {
-    var post = new PostModel(req.body);
-    var id = post._id;
+    let token = req.token;
+    let post = new PostModel(req.body);
+    let id = post._id;
 
     database.del(PostModel, id).then(() => {
-        subr.getSubreddits().then((subreddits) => {
-            res.render('posts/success', {
-                subreddits: subreddits
-            });
-        }).catch((error) => {
-            console.error(error);
-            res.render('error');
-        });
+        helper.render(res, token, 'posts/success', true);
     }).catch((error) => {
         console.error(error);
         res.render('error');
@@ -76,21 +50,15 @@ posts.post('/d', urlEncodedParser, (req, res) => {
 });
 
 posts.get('/:subreddit/:id', (req, res) => {
-    var subreddit = req.params.subreddit;
-    var id = req.params.id;
+    let token = req.token;
+    let subreddit = req.params.subreddit;
+    let id = req.params.id;
 
     database.populateOne(PostModel, id, "comments").then((post) => {
-        subr.getSubreddits().then((subreddits) => {
-            res.render('posts/show', {
-                post,
-                subreddits: subreddits,
-                subreddit: subreddit
-            });
-        }).catch((error) => {
-            console.error(error);
-            res.render('error');
+        helper.render(res, token, 'posts/show', false, {
+            post,
+            subreddit: subreddit
         });
-
     }).catch((error) => {
         console.error(error);
         res.render('error');
@@ -98,9 +66,9 @@ posts.get('/:subreddit/:id', (req, res) => {
 });
 
 posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
-    var subreddit = req.params.subreddit;
-    var id = req.params.id;
-    var content = req.body.content ? req.body.content : null;
+    let subreddit = req.params.subreddit;
+    let id = req.params.id;
+    let content = req.body.content ? req.body.content : null;
 
     commentController.saveComment(id, content).then(() => {
         res.redirect('/r/' + subreddit + '/' + id);
@@ -111,21 +79,15 @@ posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
 });
 
 posts.get('/:subreddit', (req, res) => {
-    var subreddit = req.params.subreddit;
-    var search = req.search;
+    let token = req.token;
+    let subreddit = req.params.subreddit;
+    let search = req.search;
 
     database.getAll(PostModel, search, subreddit).then((response) => {
-        subr.getSubreddits().then((subreddits) => {
-            res.render('posts/posts', {
-                subreddits: subreddits,
-                subreddit: subreddit,
-                posts: response
-            });
-        }).catch((error) => {
-            console.error(error);
-            res.render('error');
+        helper.render(res, token, 'posts/posts', false, {
+            subreddit: subreddit,
+            posts: response
         });
-
     }).catch((error) => {
         console.error(error);
         res.render('error');
