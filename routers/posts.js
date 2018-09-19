@@ -57,7 +57,8 @@ posts.get('/:subreddit/:id', (req, res) => {
     let subreddit = req.params.subreddit;
     let id = req.params.id;
 
-    database.populateOne(PostModel, id, "comments").then((post) => {
+    database.populateTwo(PostModel, id, "comments", "author").then((post) => {
+        console.log(post);
         helper.render(res, token, 'posts/show', false, {
             post,
             subreddit: subreddit

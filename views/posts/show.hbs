@@ -2,6 +2,7 @@
   <div class="col-sm-6 col-sm-offset-3">
     <a href="{{post.url}}" class="lead">{{post.title}}</a>
     <p>{{post.summary}}</p>
+    <a href="/u/{{post.author._id}}">{{post.author.username}}</a>
   </div>
   <form action="/p/d" method="post">
     <input style="display: none" type="text" name="_id" value="{{post._id}}">

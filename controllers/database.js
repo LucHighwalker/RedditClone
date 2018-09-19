@@ -35,6 +35,19 @@ function populateOne(model, id, populate) {
     });
 }
 
+// needs refactor
+function populateTwo(model, id, populate1, populate2) {
+    return new Promise((resolve, reject) => {
+        model.findById(id).populate(populate1).populate(populate2).exec((error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
 function getAll(model, search = null, subreddit = null) {
     var query = {}
     
@@ -93,6 +106,7 @@ function del(model, id) {
 module.exports = {
     getOne: getOne,
     populateOne: populateOne,
+    populateTwo: populateTwo,
     getAll: getAll,
     save: save,
     del: del
