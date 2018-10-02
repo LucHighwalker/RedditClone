@@ -1,0 +1,12 @@
+<div class="comment">
+  <p>{{this.content}}</p>
+  <form action="/r/{{this.postSubreddit}}/{{this.postID}}/c/{{this._id}}/reply" method="post">
+    <textarea class='form-control' name="content" placeholder="Comment"></textarea>
+    <div class="text-right">
+      <button type="submit">Save</button>
+    </div>
+  </form>
+  {{#each this.replies}}
+  {{>comment this}}
+  {{/each}}
+</div>

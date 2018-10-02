@@ -12,9 +12,18 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
+    replies: [this],
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    postID: {
+        type: Schema.Types.ObjectId,
+        required: true
+    },
+    postSubreddit: {
+        type: String,
+        required: true
     }
 });
 

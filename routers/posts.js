@@ -18,13 +18,13 @@ urlEncodedParser = bodyParser.urlencoded({
 // });
 
 posts.get('/n', (req, res) => {
-    let token = req.token;
+    const token = req.token;
     helper.render(res, token, 'posts/new', true);
 });
 
 posts.post('/n', urlEncodedParser, (req, res) => {
-    let token = req.token;
-    let post = new PostModel(req.body);
+    const token = req.token;
+    const post = new PostModel(req.body);
 
     user.getUser(token).then((author) => {
         postController.savePost(post, author).then(() => {
@@ -40,9 +40,9 @@ posts.post('/n', urlEncodedParser, (req, res) => {
 });
 
 posts.post('/d', urlEncodedParser, (req, res) => {
-    let token = req.token;
-    let post = new PostModel(req.body);
-    let id = post._id;
+    const token = req.token;
+    const post = new PostModel(req.body);
+    const id = post._id;
 
     database.del(PostModel, id).then(() => {
         helper.render(res, token, 'posts/success', true);
@@ -53,11 +53,11 @@ posts.post('/d', urlEncodedParser, (req, res) => {
 });
 
 posts.get('/:subreddit/:id', (req, res) => {
-    let token = req.token;
-    let subreddit = req.params.subreddit;
-    let id = req.params.id;
+    const token = req.token;
+    const subreddit = req.params.subreddit;
+    const id = req.params.id;
 
-    database.populateOne(PostModel, id, "author").then((post) => {
+    database.populateTwo(PostModel, id, "comments", "author").then((post) => {
         helper.render(res, token, 'posts/show', false, {
             post,
             subreddit: subreddit
@@ -69,13 +69,13 @@ posts.get('/:subreddit/:id', (req, res) => {
 });
 
 posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
-    let token = req.token;
-    let subreddit = req.params.subreddit;
-    let id = req.params.id;
-    let content = req.body.content ? req.body.content : null;
+    const token = req.token;
+    const subreddit = req.params.subreddit;
+    const id = req.params.id;
+    const content = req.body.content ? req.body.content : null;
 
     user.getUser(token).then((author) => {
-        commentController.saveComment(id, content, author).then(() => {
+        commentController.saveComment(id, subreddit, content, author).then(() => {
             res.redirect('/r/' + subreddit + '/' + id);
         }).catch((error) => {
             console.error(error);
@@ -87,10 +87,30 @@ posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
     });
 });
 
+posts.post('/:subreddit/:id/c/:cid/reply', urlEncodedParser, (req, res) => {
+    const token = req.token;
+    const subreddit = req.params.subreddit;
+    const postID = req.params.id;
+    const commentID = req.params.cid;
+    const content = req.body.content ? req.body.content : null;
+
+    user.getUser(token).then((author) => {
+        commentController.saveReply(commentID, content, author).then(() => {
+            res.redirect('/r/' + subreddit + '/' + postID);
+        }).catch((error) => {
+            console.error(error);
+            res.render('error');
+        });
+    }).catch((error) => {
+        console.error(error);
+        res.render('error');
+    });
+});
+
 posts.get('/:subreddit', (req, res) => {
-    let token = req.token;
-    let subreddit = req.params.subreddit;
-    let search = req.search;
+    const token = req.token;
+    const subreddit = req.params.subreddit;
+    const search = req.search;
 
     database.getAll(PostModel, search, subreddit).then((response) => {
         helper.render(res, token, 'posts/posts', false, {

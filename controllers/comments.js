@@ -4,12 +4,15 @@ const PostModel = require('../models/post');
 const UserModel = require('../models/user');
 const CommentModel = require('../models/comment');
 
-function saveComment(postID, content, author) {
+function saveComment(postID, postSubreddit, content, author) {
     return new Promise((resolve, reject) => {
         var comment = new CommentModel({
-            content: content
+            content,
+            postID,
+            postSubreddit
         });
 
+        // TODO: use user controller
         database.getOne(UserModel, author._id).then((user) => {
             comment.author = user
             user.comments.unshift(comment);
@@ -26,24 +29,44 @@ function saveComment(postID, content, author) {
                             database.save(post).then(() => {
                                 resolve();
                             }).catch((error) => {
-                                reject(reject);
+                                reject(error);
                             });
                         }).catch((error) => {
                             reject(error);
                         });
                     }).catch((error) => {
-                        console.error(error);
                         reject(error);
                     });
                 }
             });
         }).catch((error) => {
-            console.error(error);
+            reject(error);
+        });
+    });
+}
+
+function saveReply(commentID, content, author) {
+    return new Promise((resolve, reject) => {
+        database.getOne(CommentModel, commentID).then((comment) => {
+            var reply = new CommentModel({
+                content
+            });
+
+            reply.author = author
+
+            comment.replies.unshift(reply);
+            database.save(comment).then(() => {
+                resolve();
+            }).catch((error) => {
+                reject(error);
+            });
+        }).catch((error) => {
             reject(error);
         });
     });
 }
 
 module.exports = {
-    saveComment: saveComment
+    saveComment,
+    saveReply
 };

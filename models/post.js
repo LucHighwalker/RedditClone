@@ -25,7 +25,10 @@ const postSchema = new Schema({
         required: true,
         text: true
     },
-    comments: [comments.schema],
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }],
     subreddit: {
         type: String,
         required: true

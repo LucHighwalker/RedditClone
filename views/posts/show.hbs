@@ -17,6 +17,6 @@
     </div>
   </form>
   {{#each post.comments}}
-  <p>{{this.content}}</p>
+  {{>comment this}}
   {{/each}}
 </div>
