@@ -4,14 +4,16 @@
     <p>{{post.summary}}</p>
     <a href="/u/{{post.author._id}}">{{post.author.username}}</a>
   </div>
+  {{#ifEquals user._id post.author._id}}
   <form action="/p/d" method="post">
     <input style="display: none" type="text" name="_id" value="{{post._id}}">
     <input type="submit" value="delete" />
   </form>
+  {{/ifEquals}}
   <form action="/r/{{subreddit}}/{{post._id}}/c" method="post">
-    <textarea class='form-control' name="content" placeholder="Comment"></textarea>
+    <textarea class='form-control' name="content" placeholder="Comment" {{isDisabled user}}></textarea>
     <div class="text-right">
-      <button type="submit">Save</button>
+      <button type="submit" {{isDisabled user}}>Save</button>
     </div>
   </form>
   {{#each post.comments}}

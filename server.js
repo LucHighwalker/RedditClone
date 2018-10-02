@@ -20,11 +20,18 @@ app.engine('hbs', exphbs({
     layoutsDir: __dirname + '/views/layouts',
     partialsDir: __dirname + '/views/partials',
     helpers: {
+        ifEquals: (arg1, arg2, options) => {
+            return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+        },
+        isDisabled: (user) => {
+            return user ? '' : 'disabled';
+        },
         isWarning: (warning) => {
             return warning ? ' warning' : '';
         }
     }
 }));
+
 app.set('view engine', 'hbs');
 app.use(express.static('public'));
 
