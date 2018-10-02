@@ -23,31 +23,6 @@ function getOne(model, id) {
     });
 }
 
-function populateOne(model, id, populate) {
-    return new Promise((resolve, reject) => {
-        model.findById(id).populate(populate).exec((error, response) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(response);
-            }
-        });
-    });
-}
-
-// needs refactor
-function populateTwo(model, id, populate1, populate2) {
-    return new Promise((resolve, reject) => {
-        model.findById(id).populate(populate1).populate(populate2).exec((error, response) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(response);
-            }
-        });
-    });
-}
-
 function getAll(model, search = null, subreddit = null) {
     var query = {}
     
@@ -102,12 +77,37 @@ function del(model, id) {
     });
 }
 
+function populateOne(model, id, populate) {
+    return new Promise((resolve, reject) => {
+        model.findById(id).populate(populate).exec((error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
+// needs refactor
+function populateTwo(model, id, populate1, populate2) {
+    return new Promise((resolve, reject) => {
+        model.findById(id).populate(populate1).populate(populate2).exec((error, response) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
 
 module.exports = {
-    getOne: getOne,
-    populateOne: populateOne,
-    populateTwo: populateTwo,
-    getAll: getAll,
-    save: save,
-    del: del
+    getOne,
+    getAll,
+    save,
+    del,
+    populateOne,
+    populateTwo
 };

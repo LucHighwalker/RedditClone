@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const comments = require('./comment');
+
 const postSchema = new Schema({
     createdAt: {
         type: Date
@@ -23,10 +25,7 @@ const postSchema = new Schema({
         required: true,
         text: true
     },
-    comments: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
-    }],
+    comments: [comments.schema],
     subreddit: {
         type: String,
         required: true
