@@ -39,21 +39,27 @@ function checkSubreddits(subreddit) {
         database.getAll(SubrModel).then((resp) => {
             if (resp.length > 0) {
                 let subreddits = resp[0];
+                let found = false;
                 for (var i = 0; i < subreddits.content.length; i++) {
                     if (subreddits.content[i] === subreddit) {
-                        resolve(true)
+                        // resolve(true)
+                        found = true;
                     }
                 }
-                subreddits.content.push(subreddit);
-                SubrModel.updateOne({
-                    _id: subreddits._id
-                }, subreddits, (err, resp) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(false);
-                    }
-                });
+                if (!found) {
+                    subreddits.content.push(subreddit);
+                    SubrModel.updateOne({
+                        _id: subreddits._id
+                    }, subreddits, (err, resp) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(false);
+                        }
+                    });
+                } else {
+                    resolve(true);
+                }
             } else {
                 let subreddits = new SubrModel({
                     content: [subreddit]
