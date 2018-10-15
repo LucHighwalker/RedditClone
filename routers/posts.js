@@ -87,16 +87,14 @@ posts.post('/:subreddit/:id/c', urlEncodedParser, (req, res) => {
     });
 });
 
-posts.post('/:subreddit/:id/c/:cid/reply', urlEncodedParser, (req, res) => {
+posts.post('/c/:cid/reply', urlEncodedParser, (req, res) => {
     const token = req.token;
-    const subreddit = req.params.subreddit;
-    const postID = req.params.id;
     const commentID = req.params.cid;
     const content = req.body.content ? req.body.content : null;
 
     user.getUser(token).then((author) => {
-        commentController.saveReply(commentID, content, author).then(() => {
-            res.redirect('/r/' + subreddit + '/' + postID);
+        commentController.saveReply(commentID, content, author).then((comment) => {
+            res.redirect('/r/' + comment.postSubreddit + '/' + comment.postID);
         }).catch((error) => {
             console.error(error);
             res.render('error');

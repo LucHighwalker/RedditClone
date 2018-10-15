@@ -48,15 +48,23 @@ function saveComment(postID, postSubreddit, content, author) {
 function saveReply(commentID, content, author) {
     return new Promise((resolve, reject) => {
         database.getOne(CommentModel, commentID).then((comment) => {
+            const postID = comment.postID;
+            const postSubreddit = comment.postSubreddit;
+            
             var reply = new CommentModel({
-                content
+                content,
+                postID,
+                postSubreddit
             });
 
             reply.author = author
 
             comment.replies.unshift(reply);
             database.save(comment).then(() => {
-                resolve();
+                resolve({
+                    postID,
+                    postSubreddit
+                });
             }).catch((error) => {
                 reject(error);
             });

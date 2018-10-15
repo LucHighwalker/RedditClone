@@ -1,6 +1,6 @@
-<div class="comment">
+<div class="comment" style="background-color: lightgray; margin: 10px;">
   <p>{{this.content}}</p>
-  <form action="/r/{{this.postSubreddit}}/{{this.postID}}/c/{{this._id}}/reply" method="post">
+  <form action="/r/c/{{this._id}}/reply" method="post">
     <textarea class='form-control' name="content" placeholder="Comment"></textarea>
     <div class="text-right">
       <button type="submit">Save</button>
